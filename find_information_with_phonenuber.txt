@@ -1,0 +1,94 @@
+Phone numbers often contain clues to the owner's identity and can bring up a lot of data during an OSINT investigation. Starting with a phone number, we can search through a large number of online databases with only a few clicks to discover information about a phone number. It can include the carrier, the owner's name and address, and even connected online accounts.
+
+While a phone number may not seem like much information to give out, an OSINT researcher can quickly discover information that ties a phone number to a variety of other clues. The data can be used to detect whether a phone number is a throwaway VoIP number used to hide the owner's identity or a cell phone belonging to a real person. In the event of buying something online or replying to an apartment ad, this information is incredibly useful to know.
+
+For a hacker, the ability to turn a phone number into multiple connected online accounts, email addresses, or screen names makes it a perfect starting point for bigger things to come. A quick scan to discover the carrier of a phone number can provide everything a hacker needs for a well-crafted phishing email pretending to be from the victim's carrier. Once a hacker can identify other details about the target that may be attached to the phone number, it's easy to identify the weakest link and attack the target using whatever information that's dug up.
+
+OSINT Tools for Phone Numbers
+
+For quickly searching through phone numbers, we can use both command-line and browser-based tools. Command line tools give the advantage of simple operation and greater customization but require you to have Python installed and updated. Today, we'll be using a tool called Phoneinfoga to quickly determine if the number is associated with a disposable phone number.
+
+One of the best resources for OSINT is Mike Bazzel's IntelTechniques website, which we'll also be focusing on here. This website contains several custom tools that Bazzel had organized to be useful for researchers. Many of these tools are already in Buscador OS, a virtual machine that can be run to provide an operating system geared towards OSINT investigations
+
+The Scenario
+
+As an example, we'll take a sample business listing from a classified ad. How would we verify this? If the ad claims to be from a licensed professional, could we track down a license attached to the phone number? A simple reverse phone number lookup may find something, but to see the real data, you have to dig deeper and utilize more than just one reverse number lookup tool.
+
+
+Install Phoneinfoga
+
+To supplement the information you find online later, you can use a Python tool called Phoneinfoga, which allows you to search for details about phone numbers from the command line. To use Phoneinfoga, open a terminal window and enter the following four commands one by one or at the same time.
+
+
+~$ git clone https://github.com/sundowndev/PhoneInfoga
+~$ cd PhoneInfoga/
+~/PhoneInfoga$ python3 -m pip install -r requirements.txt
+~/PhoneInfoga$ cp config.example.py config.py
+
+
+Next, you can run the program with the options displayed in the help file.
+
+
+~/PhoneInfoga$ python3 phoneinfoga.py -h
+
+
+Search a Phone Number with Phoneinfoga
+
+To search for a phone number, we just need to add the -n flag and then whatever number we want to search for. If you use the --recon argument, it will perform an advanced search.
+
+~/PhoneInfoga$ python3 phoneinfoga.py -n 1717███9539 --recon
+
+
+Sometimes, this tool can get you temporarily blacklisted from Google searches because of the way it's programmed. It's annoying but easily resolved with a Google abuse exemption, detailed at the end of the video above.
+
+
+As you can see above, there are lots of links to dive into, and right away the name and business associated with the phone number are available in the output.
+
+
+Access the IntelTechniques OSINT Portal
+
+Now, let's concentrate on the web tools that are free on Bazzel's website since they're a little bit easier to work with than with the command line tool above. To follow along, you can go to inteltechniques.com/menu.html, then click on the "Telephone Number" tab.
+
+
+A submenu appears when you click on "Telephone Number," and you'll need to select the "Telephone Search Tool" to bring up the page that will allow us to search many tools at once.
+
+As you can see, it's a healthy mix of people-searching tools, phonebook directories, scam reporting websites, and social media connections. These are free, public resources combined into one easy-to-use search tool, allowing anyone with a browser and internet connection to begin researching who is on the other end of a phone number.
+
+
+We can input a number into each tool one by one, but the easiest way is to enter the number into the field at the top, and click "Populate All."
+
+Search a Phone Number on IntelTechniques
+
+In the search tool, enter the number into the field next to the "Populate All" button, then click the button to auto-populate the number into the rest of the fields. Next, select "Submit All" under the list of services to run all searches on the phone number. All of the services will open up in different tabs or pop-ups with the search already submitted (you may need to allow pop-ups in your browser).
+
+
+Search Results for Clues & Patterns
+
+Now, check out some of the resources loaded from the search. Here, some of the people searching services have turned our phone number into a name.
+
+Along with the person's name is a startling amount of information, the most important of which is a location and address for us to tie together further details. We found a lot of results with the name, making a pretty strong likelihood that this is the person behind our ad. So how would we prove they are a licensed professional?
+Step 6Locate Information That Can Be Verified
+
+On another search site result, we can see the name of a business associated with the phone number, which is what we're looking for! If we can tie the name of a company and the name we've found associated with the number, we can look up a source we trust, like a state listing of active businesses, to determine whether this is a real business. Here, we have a name, address, and business name; everything we need to verify whether a business exists.
+
+
+Verify with Primary Source Data
+
+To check out the information we found, we should look for some primary source information that backs up our discovery. In our case, the best database to search is the Department of State business database for the state we discovered the business in. Here, we were able to pull a valid business listing, one which matches the address we previously found. It appears the person behind the online advertisement is honest — they are a licensed professional after all.
+
+
+Phone Numbers Can Tie Everything Together
+
+As a starting point, a phone number can provide everything you need to locate information about a target. With tools like Phoneinfoga, you can quickly discover whether a phone number is a throwaway or a legitimate number. If the number is real, the IntelTecniques website tools can piece together clues to build a picture of the person behind the phone number, sometimes quite literally.
+
+With the right tools, a single phone number can lead you from clue to clue, piecing together everything you need to learn about a target.
+
+I hope you enjoyed this guide to using phone numbers in an OSINT investigation! If you have any questions about this tutorial on phone number recon, or if you have a comment, ask below or feel free to reach me on Twitter @KodyKinzie.
+
+###resources for finding information with website
+
+Department Of State
+
+FastPeople Search
+
+That's Them

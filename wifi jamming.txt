@@ -1,0 +1,83 @@
+WiFi jamming allows you to drive unwanted, rogue stations off of your network. Is someone stealing your bandwidth? Or messing with your Wi-Fi? Then get rid of them with this deauthentication attack using Kali Linux and some simple tools.
+WiFi jamming: a ‘denial-of-service attack’
+
+In this tutorial we will be flooding the target accesspoint with deauthentication packets. This will cause the target accesspoint to disconnect the wireless clients from the network. So in fact this ‘Wi-Fi deauthentication attack‘ is a type of denial-of-service (DOS) attack. It doesn’t involve the actual jamming of radio frequencies.
+Requirements and procedure
+
+For WiFi jamming you will need a computer running Kali Linux, and a wireless interface which is capable of operating in monitor mode and can do packet injection. I will be using the TP-Link TL-WN722N 150Mbps High Gain Wireless USB Adapter, which is cheap and powerful.
+
+
+When you have your system up and running, it only takes 3 easy steps to drive rogue stations off your network:
+
+
+
+    Enable monitor mode on your wireless interface.
+    Determine the MAC addresses of the target accesspoint (and client).
+    Send deauthentication packets to the access point to disconnect one or all clients.
+
+
+Enable monitor mode on the WiFi interface
+
+First of all, list the available wireless interfaces by running airmon-ng:
+
+
+# command
+airmon-ng
+
+
+My laptop has two built-in WiFi cards (wlan0 and wlan1), but for the WiFi jamming I will be using the TP-Link USB adapter which is wlan4. If your wireless interface is wlan0, you should type ‘wlan0’ whenever I mention ‘wlan4’ in this tutorial.
+
+Enable monitor mode on the wireless card:
+
+
+# command
+airmon-ng start wlan0
+
+
+The output of airmon-ng tells us two important things:
+
+    There are a few processes that could interfere with airodump-ng.
+    A new monitor mode interface called wlan4mon was created.
+
+To get rid of the interfering processes, kill them by using ‘airmon-ng check kill’:
+
+
+# command
+airmon-ng check kill
+
+Your wireless interface is now ready to be used by Airodump-ng in the following steps.
+Determine the target MAC address
+
+Now we use airodump-ng on the interface wlan4mon to scan for all nearby networks:
+
+
+# command 
+airodump-ng wlan0
+
+In the image above you see our target accesspoint with ESSID ‘OneGuyOneBlog’. The important part here is the BSSID (‘C6:25:06:57:99:0E’) of this accesspoint. This is the MAC address which we will need to send our packtets to later on. Also take note of the channel (CH 1) which this accesspoint is operating on.
+
+Next, we use airodump-ng to discover which clients are connected to ‘OneGuyOneBlog’ by using the BSSID and channel number we just found
+
+# command
+airodump-ng -c 1 --bssid macaddress wlan0
+
+Note: do not forget to change the channel ‘-c 1‘ to the channel number of your target AP, or you’ll get the error “No such BSSID available”
+
+
+The image above shows that there are two clients (‘stations’) connected to our target accesspoint ‘OneGuyOneBlog’.  One with the MAC address 90:C1:15:1C:85:C0 and the other with address F0:25:B7:23:CB:03.
+
+
+Disconnect all clients
+
+If you want to disconnect all wireless devices from the target network, you can do this by using Aireplay on the BSSID of the accespoint like this:
+
+
+aireplay-ng -0 0 -a bssid wlan0
+
+The option ‘-0 0’ (two zeroes) tells Aireplay to use attack type 0 (deauthentication) for 0 amount of times (zero means infinite)
+
+Disconnect a single client
+
+If you also specify the MAC address of a client (see ‘stations’ above) with the -c option, you can disconnect just that single wireless device from the network instead of all devices:
+
+aireplay-ng -0 - -a bssid -c targetstation wlan0

@@ -1,0 +1,104 @@
+Low Orbit Ion Cannon
+
+Low Orbit Ion Cannon is a tool popular among script kiddies for attacking any server and bringing it down by performing DOS or DDOS attack.
+
+The world of Information Security is growing leading to the development of codes which brings vulnerability within them causing a loophole in the security.
+
+But the most common issue till date to most of the web servers and service providers online is DDoS, one of the oldest and developing methods of the hacking world.
+Denial Of Service
+
+DOS or Denial-Of-Service attack is one of the most popular hack methodologies which most of the hackers around the world use to hack into any network or bring any service down.
+
+In this way, the server will not be able to accept valid user request causing a denial of service to the user.
+
+They are as DOS or DDOS attack.
+
+DOS refers to the attack type when an attacker attacks a target vulnerable to DOS with only a single IP and the target tries to reply for each of the packet requests it gets and when the request flow is more than it’s Bandwidth or more than its accepting capacity then it fails to accept new connections and rejects the new connections causing denial of service.
+
+This can be prevented by modern firewalls by applying a patch script in them which would specify the number of connections that must be provided to a single IP or IP range.
+
+
+Distributed DOS Attack
+
+DDOS is a type of multiple DOS attack which is performed by an attacker using BOTNETS which he/she had made in course of time by sending malicious link or attachment and compromising internet users or webcams or smart devices.
+
+Since the attacker has the access to the botnets which can be instructed to perform a DOS attack cause multiple devices to DOS a single target which is patched only for DOS rather than DDOS.
+
+In this case, the target receives request’s from multiple IP’s over the internet causing the DOS patch to breakout.
+
+This effectively makes it impossible to stop the attack simply by blocking a single IP more than that it’s very difficult to distinguish legitimate users data packets from an attacking packet.
+
+This can also be done by a script which performs the task of generating packets with different source IP’s but single Destination IP.
+
+
+
+LOIC (Low Orbit Ion Cannon)
+
+Low Orbit Ion Cannon is an open source network stress testing and Denial of Service attack tool, written in C#. LOIC was developed by Praetox Technologies but later was released into public domain hosting on several open platforms.
+
+The tool is able to perform a simple dos attack by sending a large sequence of UDP, TCP or HTTP requests to the target server.
+
+It’s a very easy tool to use, even by those lacking any basic knowledge of hacking.
+
+The only thing a user needs to know for using the tool is the URL of the target.
+
+
+Type of attacks
+
+The tool opens multiple connections to the target server and sends a continuous sequence of messages which can be defined from the TCP/UDP message parameter option available on the tool.
+
+In the TCP and UDP attacks, the string is sent as a plain text but in the HTTP attack, it is included in the contents of an HTTP GET message.
+
+UDP Attack 
+
+    To perform the UDP attack, select the method of attack as UDP.
+     It has port 80 as the default option selected, but you can change this according to your need.
+    It is a connectionless protocol.
+
+TCP Attack: 
+
+    This method is similar to UDP attack.
+    Select the type of attack as TCP to use this. It is a connection based protocol.
+
+HTTP Attack: 
+
+    In this attack, the tool sends HTTP requests to the target server.
+    A web application firewall can detect this type of attack easily.
+
+
+How to Perform DDoS using LOIC
+
+
+    Downloading :-
+
+You can Download LOIC from any site by making a google search and install on any OS, it would be advantageous if you using any Linus Distributions (Kali Linux) and build from downloading it from GitHub. Copy-paste the following command in Linux terminal to download LOIC
+
+“ git clone https://github.com/NewEraCracker/LOIC.git ”
+
+    Run the tool and Provide the IP or URL of the Victim in the Target Section 1, it will be shown in the selected target box.
+    Select your attack method in section
+    You can observe your attack status in the box provided under the selected target region.
+    You can also set the speed of the attack by the slider. It is set to faster as default but you can slow down it with the slider.
+
+
+
+Here’s the meaning of each field:
+
+    IDLE: It shows the number of threads idle. It must be zero for higher efficiency of the attack.
+    Connecting: This shows the number of connection that is been tried to connect to the victim server.
+    Requesting: This shows the number of connections that are requesting some information from the victim server.
+    Downloading: This shows the number of connection that is initiating some download for some information from the server.
+    Downloaded: This number shows how many times data is been downloading, which has been initiated from victim server on which you are attacking.
+    Requested: This number shows how many times a data download has been requested from victim server.
+    Failed: This number shows how many times the server did not respond to the request. A larger number of fails in this field indicates the server is going down. The success of the attack can be measured by the number shown in this field.
+
+
+
+Drawbacks of using LOIC
+
+            This tool does not take any precautions to hide IP address of the origin of the attack. Attacks generated by this tool are simple and expose the IP address of attacker in each request packet sent to victim server to flood the request queue. If you are thinking that we can use proxies to solve this problem, you are wrong. Attackers cannot use proxies in these attacks because your requests will hit the proxy server, not the target server. So you will not be able to launch a DOS attack on the server effectively while using a proxy. But some analysts say that this can be used with a proxy server if the proxy is robust enough. According to them, all your request packets will be forwarded to the server system by proxy at the end.
+
+This is all about LOIC,
+
+
+

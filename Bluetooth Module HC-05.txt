@@ -1,0 +1,48 @@
+after connecting everything go to serial monitor
+
+select BothNL & CR
+
+and baud rate to 38400 baud
+
+on the serial monitor command prompt type 
+
+AT and press enter
+
+then type the command for the name
+
+AT+NAME
+
+for address
+
+AT+ADDR
+
+for version
+
+AT+VERSION
+
+for UART
+
+AT+UART
+
+for role basically slave and master
+
+AT+ROLE
+
+for the password
+
+AT+PSWD
+
+for changing name
+
+AT+NAME=Test_Bluetooth
+
+for changing password we need to specify the password on double quation
+
+AT+PSWD="password"
+
+
+
+
+ 
+
+

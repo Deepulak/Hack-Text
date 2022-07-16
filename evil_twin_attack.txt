@@ -1,0 +1,156 @@
+Stealing Wi-Fi Passwords with an Evil Twin Attack 
+
+While Wi-Fi networks can be set up by smart IT people, that doesn't mean the users of the system are similarly tech-savvy. We'll demonstrate how an evil twin attack can steal Wi-Fi passwords by kicking a user off their trusted network while creating a nearly identical fake one. This forces the victim to connect to the fake network and supply the Wi-Fi password to regain internet access.
+
+While a more technical user might spot this attack, it's surprisingly effective against those not trained to look for suspicious network activity. The reason it's so successful is that most users don't know what a real firmware update looks like, leading to confusion in recognizing that an attack is in progress.
+
+What Is an Evil Twin Attack
+
+An evil twin attack is a type Wi-Fi attack that works by taking advantage of the fact that most computers and phones will only see the "name" or ESSID of a wireless network. This actually makes it very hard to distinguish between networks with the same name and same kind of encryption. In fact, many networks will have several network-extending access points all using the same name to expand access without confusing users.
+
+If you want to see how this works, you can create a Wi-Fi hotspot on your phone and name it the same as your home network, and you'll notice it's hard to tell the difference between the two networks or your computer may simply see both as the same network. A network sniffing tool like Wigle Wifi on Android or Kismet can clearly see the difference between these networks, but to the average user, these networks will look the same.
+
+This works great for tricking a user into connecting if we have a network with the same name, same password, and same encryption, but what if we don't know the password yet? We won't be able to create a network that will trick the user into connecting automatically, but we can try a social engineering attack to try to force the user to give us the password by kicking them off the real network.
+
+
+Using a Captive Portal Attack
+
+In a captive portal-style evil twin attack, we will use the Airgeddon wireless attack framework to try to force the user to connect to an open network with the same name as the network they trust. A captive portal is something like the screen you see when connecting to an open network at a coffee shop, on a plane, or at a hotel. This screen that contains terms and conditions is something people are used to seeing, and we'll be using that to our advantage to create a phishing page that looks like the router is updating.
+
+The way we'll trick the victim into doing this is by flooding their trusted network with de-authentication packets, making it impossible to connect to the internet normally. When confronted with an internet connection that refuses to connect and won't allow any internet access, the average irritated user will discover an open Wi-Fi network with the same name as the network they are unable to connect to and assume it is related to the problem.
+
+
+Upon connecting to the network, the victim will be redirected to a phishing page explaining that the router has updated and requires a password to proceed. If the user is gullible, they'll enter the network password here, but that's not where the fun stops. If the victim gets irritated by this inconvenience and types the wrong password, we'll need to make sure we can tell a wrong password from the right one. To do this, we'll capture a handshake from the network first, so we can check each password the user gives us and tell when the correct one is entered.
+
+
+Technologically Assisted Social Engineering
+
+In order for this attack to work, a few key requirements need to be met. First, this attack requires a user to do some ignorant things. If the target you are selecting is known for being tech-savvy, this attack may not work. An advanced user, or anyone with any cybersecurity awareness training, will spot this attack in progress and very possibly be aware that it is a relatively close-ranged attack. Against a well-defended target, you can expect this attack to be detected and even localized to find you.
+
+Second, a victim must be successfully authenticated from their network, and be frustrated enough to join a totally unknown open network that just appeared out of nowhere and has the same name of the network they trust. Further, attempting to connect to this network (on macOS) even yields a warning that the last time the network was connected to, it had a different kind of encryption.
+
+
+Finally, the victim must enter the network password into the sometimes sketchy-looking phishing page they are redirected to after joining the open network the attacker has created. There are a lot of clues that could tip a sharp user off to the fact that this page, including the wrong language, wrong brand of router (if the phishing page mentions it), or misspellings and Engrish in the text of the page. Since router pages usually look pretty ugly, these details may not stand out to anyone unfamiliar with what their router's admin page looks like.
+
+
+Make Sure You Have Everything
+
+To prepare our evil twin access point attack, we'll need to be using Kali Linux or another supported distro. Quite a few distributions are supported, and you can check out the Airgeddon GitHub page for more about which Airgeddon will work with.
+
+You can use a Raspberry Pi running Kali Linux for this with a wireless network adapter, but you'll need to have access to the GUI and not be SSHed into the Pi, since you'll need to be able to open and navigate multiple windows in this multi-bash script.
+
+Finally, you'll need a good wireless network adapter for this. In our tests, we found that the TP-Link WN722N v1 and Panda Wireless PAU07 cards performed well with these attacks. You can find more information about choosing a good wireless network adapter at the link below.
+
+
+Install Airgeddon
+
+To start using the Airgeddon wireless attack framework, we'll need to download Airgeddon and any needed programs. The developer also recommends downloading and installing a tool called CCZE to make the output easier to understand. You can do so by typing apt-get install ccze a terminal window.
+
+
+sudo apt install ccze
+
+
+Next, we'll install Airgeddon with git clone.
+
+~# git clone https://github.com/v1s1t0r1sh3r3/airgeddon.git
+
+Then change directories and start Airgeddon with the following commands.
+
+
+~# cd airgeddon
+~/airgeddon# sudo bash ./airgeddon.sh
+
+
+If you see the alien spaceship, you know you're ready to hack.
+
+
+Configure Airgeddon
+
+Press Enter to check the various tools the Airgeddon framework relies on. If you're missing any (it'll say "Error" next to them), you can hit Y and Enter at the prompt to try and auto-install anything missing, but that generally doesn't work.
+
+Instead, open a new terminal window and type apt-get install tool, substituting "tool" for the name of the missing tool. If that doesn't work, you can also try sudo pip install tool. You should install all the tools, otherwise, you may experience problems during your attack, especially if you are missing dnsspoof.
+
+When you have all of the tools, proceed to the next step by pressing Enter. Next, the script will check for internet access so it can update itself if a newer version exists
+
+
+When that is done, press Enter to select the network adapter to use. Press the number on your keyboard that correlates to the network adapter in the list, then Enter.
+
+
+
+After we select our wireless network adapter, we'll proceed to the main attack menu.
+
+
+Press 2 and Enter to put your wireless card into monitor mode. Next, select option 7 and Enter for the "Evil Twin attacks" menu, and you'll see the submenu for this attack module appear.
+
+
+Select the Target
+
+Now that we're in our attack module, select option 9 and Enter for the "Evil Twin AP attack with a captive portal." We'll need to explore for targets, so press Enter, and you'll see a window appear that shows a list of all detected networks. You'll need to wait for a little to populate a list of all the nearby networks.
+
+
+After it runs for about 60 seconds, exit out of the small window, and a list of targets will appear. You'll notice that networks with someone using them appear in yellow with an asterisk next to them. This is essential since you can't trick someone into giving you the password if no one is on the network in the first place.
+
+
+Select the number of the target you wish to attack, and press Enter to proceed to the next screen.
+
+
+Gather the Handshake
+
+Now, we'll select the type of de-authentication attack we want to use to kick the user off their trusted network. I recommend the second option, "Deauth aireplay attack," but different attacks will work better depending on the network.
+
+Press Enter once you've made your selection, and you'll be asked if you'd like to enable DoS pursuit mode, which allows you to follow the AP if it moves to another channel. You can select yes (Y) or no (N) depending on your preference, and then press Enter. Finally, you'll select N for using an interface with internet access. We won't need to for this attack, and it will make our attack more portable to not need an internet source.
+
+
+
+Next, it will ask you if you want to spoof your MAC address during the attack. In this case, I chose N for "no."
+
+Now, if we don't already have a handshake for this network, we'll have to capture one now. Be VERY careful not to accidentally select Y for "Do you already have a captured Handshake file?" if you do not actually have a handshake. There is no clear way to go back to the script without restarting if you make this mistake.
+
+Since we don't yet have a handshake, type N for no, and press Enter to begin capturing.
+
+
+
+Once the capture process has started, a window with red text sending deauth packets and a window with white text listening for handshakes will open. You'll need to wait until you see "WPA Handshake:" and then the BSSID address of your targeted network. In the example below, we're still waiting for a handshake.
+
+
+
+Once you see that you've got the handshake, you can exit out of the Capturing Handshakewindow. When the script asks you if you got the handshake, select Y, and save the handshake file. Next, select the location for you to write the stolen password to, and you're ready to go to the final step of configuring the phishing page.
+
+
+
+Set Up the Phishing Page
+
+In the last step before launching the attack, we'll set the language of the phishing page. The page provided by Airgeddon is pretty decent for testing out this style of attack. In this example, we'll select 1 for English. When you've made your selection, press Enter, and the attack will begin with six windows opening to perform various functions of the attack simultaneously.
+
+
+
+Capture Network Credentials
+
+With the attack underway, the victim should be kicked off of their network and see our fake one as the only seemingly familiar option. Be patient, and pay attention to the network status in the top right window. This will tell you when a device joins the network, allowing you to see any password attempts they make when they're routed to the captive portal.
+
+
+
+When the victim joins your network, you'll see a flurry of activity like in the picture below. In the top-right corner, you'll be able to see any failed password attempts, which are checked against the handshake we gathered. This will continue until the victim inputs the correct password, and all of their internet requests (seen in the green text box) will fail until they do so
+
+
+
+When the victim caves and finally enters the correct password, the windows will close except for the top-right window. The fake network will vanish, and the victim will be free to connect back to their trusted wireless network.
+
+The credentials should be displayed in the top-right Control screen, and you should copy and paste the password into a file to save, in case the script doesn't save the file correctly. This sometimes happens, so make sure not to forget this step or you might lose the password you just captured.
+
+
+
+After this, you can close the window, and close down the tool by pressing Ctrl + C. If we get a valid credential in this step, then our attack has worked, and we've got the Wi-Fi password by tricking the user into submitting it to our fake AP's phishing page!
+Defending Against an Evil Twin AP Attack
+
+The best way of defending against an evil twin attack is to know about the tactic, and know that the signs of one should make you highly suspicious. If you abruptly lose the ability to connect to your trusted network and suddenly see an open wireless network with the same name, these are neither a coincidence nor a normal turn of events.
+
+Never connect to an unknown wireless network pretending to be yours, especially one without encryption. If you suspect your router is actually updating, turn off your Wi-Fi and plug into the router's Ethernet directly to see what the problem is.
+
+Thanks for reading this guide to evil twin AP attacks! If you have any questions or comments, feel free to leave a comment or reach me on Twitter @KodyKinzie. And check out our Wi-Fi hacking series for more guides.
+
+
+
+
+
+
